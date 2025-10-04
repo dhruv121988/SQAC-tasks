@@ -56,7 +56,8 @@ It connects to **Firebase** for real-time database operations and authentication
 - Firestore Database connection  
 - Data visualized dynamically  
 
-#### 📁 Folder:
+#### 📁 Folder: [AdminDashboard](./AdminDashboard)
+
 
 ---
 
@@ -79,7 +80,7 @@ A modern and sleek **Currency Converter** app that converts between world curren
 3. The app fetches live exchange rate data via API  
 4. Displays the converted result instantly  
 
-#### 📁 Folder:
+#### 📁 Folder: [CurrencyConverter](./CurrencyConverter)
 
 ---
 
@@ -102,7 +103,7 @@ The **Movie Search App** allows users to search for any movie and view its detai
 3. The API returns details in JSON format  
 4. The app dynamically displays movie info on the page  
 
-#### 📁 Folder:
+#### 📁 Folder: [MovieSearchApp](./MovieSearchApp)
 
 ---
 
