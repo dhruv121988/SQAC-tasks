@@ -1,4 +1,3 @@
-const API_KEY = "f6a88bde"; 
 const searchBtn = document.getElementById("search-btn");
 const searchInput = document.getElementById("search-input");
 const movieContainer = document.getElementById("movie-container");
@@ -8,8 +7,8 @@ searchBtn.addEventListener("click", () => {
   if (query) {
     fetchMovies(query);
   } else {
-    movieContainer.innerHTML = "<p> Please enter a movie name!</p>";
-    alert('please enter a movie name');
+    movieContainer.innerHTML = "<p>Please enter a movie name!</p>";
+    alert('Please enter a movie name');
   }
 });
 
@@ -17,18 +16,16 @@ async function fetchMovies(query) {
   movieContainer.innerHTML = "<p>Loading...</p>";
   
   try {
-    let res = await fetch(`/api/movies?s=${query}`);
-    let data = await res.json();
-
-    console.log(data);
+    const res = await fetch(`/api/movies?s=${query}`);
+    const data = await res.json();
 
     if (data.Response === "True") {
       displayMovies(data.Search);
     } else {
-      movieContainer.innerHTML = `<p> ERROR! ${data.Error}</p>`;
+      movieContainer.innerHTML = `<p>ERROR! ${data.Error}</p>`;
     }
   } catch (error) {
-    movieContainer.innerHTML = "<p> Error fetching data</p>";
+    movieContainer.innerHTML = "<p>Error fetching data</p>";
     console.error(error);
   }
 }
@@ -36,7 +33,7 @@ async function fetchMovies(query) {
 function displayMovies(movies) {
   movieContainer.innerHTML = "";
   movies.forEach(movie => {
-    let movieCard = `
+    const movieCard = `
       <div class="movie-card">
         <img src="${movie.Poster !== "N/A" ? movie.Poster : "https://via.placeholder.com/180x270?text=No+Image"}" alt="${movie.Title}">
         <h3>${movie.Title}</h3>
