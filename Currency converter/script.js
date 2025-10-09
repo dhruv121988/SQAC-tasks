@@ -12,7 +12,6 @@ const currencyFlags = {
   "AUD": "au", "CAD": "ca"
 };
 
-// ✅ Load dropdowns manually (no API call needed)
 function loadCurrencies() {
   const currencies = Object.keys(currencyFlags);
 
@@ -34,7 +33,6 @@ function loadCurrencies() {
   updateFlag(toCurrency, toFlag);
 }
 
-// ✅ Update flag images
 function updateFlag(selectElement, flagElement) {
   const currencyCode = selectElement.value;
   if (currencyFlags[currencyCode]) {
@@ -44,7 +42,6 @@ function updateFlag(selectElement, flagElement) {
   }
 }
 
-// ✅ Convert currency using backend
 async function convertCurrency() {
   const from = fromCurrency.value;
   const to = toCurrency.value;
@@ -71,7 +68,6 @@ async function convertCurrency() {
   }
 }
 
-// ✅ Event listeners
 document.getElementById("convert").addEventListener("click", convertCurrency);
 fromCurrency.addEventListener("change", () => updateFlag(fromCurrency, fromFlag));
 toCurrency.addEventListener("change", () => updateFlag(toCurrency, toFlag));
@@ -85,4 +81,5 @@ swapBtn.addEventListener("click", () => {
 });
 
 loadCurrencies();
+
 
