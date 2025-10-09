@@ -3,7 +3,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyAyVmUaG65jJZD4xbYafQLQwIaFKuBMx-o",
   authDomain: "admin-dashboard-23957.firebaseapp.com",
   projectId: "admin-dashboard-23957",
-  storageBucket: "admin-dashboard-23957.firebasestorage.app",
+  storageBucket: "admin-dashboard-23957.appspot.com",
   messagingSenderId: "914880545893",
   appId: "1:914880545893:web:57ae61cad9b490020f728c",
   measurementId: "G-NMVQBPL83E"
@@ -15,11 +15,18 @@ const db = firebase.firestore();
 const form = document.getElementById("product-form");
 const tableBody = document.querySelector("#product-table tbody");
 
+// Add product
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const name = form.name.value;
+
+  const name = form.name.value.trim();
   const price = Number(form.price.value);
-  const description = form.description.value;
+  const description = form.description.value.trim();
+
+  if (!name || price <= 0) {
+    alert("Please enter valid name and price");
+    return;
+  }
 
   try {
     await db.collection("products").add({
@@ -31,18 +38,17 @@ form.addEventListener("submit", async (e) => {
     form.reset();
   } catch (err) {
     console.error("Error adding product:", err);
-    alert("Error adding product. Check console.");
+    alert("Error adding product.");
   }
 });
 
-db.collection("products").orderBy("dateAdded", "desc")
+db.collection("products")
+  .orderBy("dateAdded", "desc")
   .onSnapshot((snapshot) => {
     tableBody.innerHTML = "";
     snapshot.forEach((doc) => {
       const product = doc.data();
-      const date = product.dateAdded 
-        ? new Date(product.dateAdded.seconds * 1000).toLocaleString() 
-        : '';
+      const date = product.dateAdded ? new Date(product.dateAdded.seconds * 1000).toLocaleString() : "";
       const row = `
         <tr>
           <td>${product.name}</td>
