@@ -1,4 +1,3 @@
-const apiKey = "b2ea21ed0f55206ef1f02eed";
 const fromCurrency = document.getElementById("from-currency");
 const toCurrency = document.getElementById("to-currency");
 const amount = document.getElementById("amount");
@@ -8,23 +7,14 @@ const fromFlag = document.getElementById("from-flag");
 const toFlag = document.getElementById("to-flag");
 
 const currencyFlags = {
-  "USD": "us",
-  "EUR": "eu",
-  "GBP": "gb",
-  "INR": "in",
-  "PKR": "pk",
-  "TRY": "tr",
-  "JPY": "jp",
-  "CNY": "cn",
-  "AUD": "au",
-  "CAD": "ca"
+  "USD": "us", "EUR": "eu", "GBP": "gb", "INR": "in",
+  "PKR": "pk", "TRY": "tr", "JPY": "jp", "CNY": "cn",
+  "AUD": "au", "CAD": "ca"
 };
 
-
-async function loadCurrencies() {
-  const response = await fetch(`https://v6.exchangerate-api.com/v6/${apiKey}/latest/USD`);
-  const data = await response.json();
-  const currencies = Object.keys(data.conversion_rates);
+// ✅ Load dropdowns manually (no API call needed)
+function loadCurrencies() {
+  const currencies = Object.keys(currencyFlags);
 
   currencies.forEach(currency => {
     let option1 = document.createElement("option");
@@ -44,7 +34,7 @@ async function loadCurrencies() {
   updateFlag(toCurrency, toFlag);
 }
 
-
+// ✅ Update flag images
 function updateFlag(selectElement, flagElement) {
   const currencyCode = selectElement.value;
   if (currencyFlags[currencyCode]) {
@@ -54,7 +44,7 @@ function updateFlag(selectElement, flagElement) {
   }
 }
 
-
+// ✅ Convert currency using backend
 async function convertCurrency() {
   const from = fromCurrency.value;
   const to = toCurrency.value;
@@ -65,30 +55,34 @@ async function convertCurrency() {
     return;
   }
 
-  const response = await fetch(`https://v6.exchangerate-api.com/v6/${apiKey}/latest/${from}`);
-  const data = await response.json();
-  const rate = data.conversion_rates[to];
-  const convertedAmount = (amt * rate).toFixed(2);
+  try {
+    const response = await fetch(`/api/convert?from=${from}&to=${to}&amount=${amt}`);
+    const data = await response.json();
 
-  resultDiv.innerHTML = `${amt} ${from} = ${convertedAmount} ${to}`;
+    if (data.rate) {
+      const convertedAmount = (amt * data.rate).toFixed(2);
+      resultDiv.innerHTML = `${amt} ${from} = ${convertedAmount} ${to}`;
+    } else {
+      resultDiv.innerHTML = "Error converting currency";
+    }
+  } catch (error) {
+    console.error(error);
+    resultDiv.innerHTML = "Error fetching data!";
+  }
 }
 
+// ✅ Event listeners
 document.getElementById("convert").addEventListener("click", convertCurrency);
-
-
 fromCurrency.addEventListener("change", () => updateFlag(fromCurrency, fromFlag));
 toCurrency.addEventListener("change", () => updateFlag(toCurrency, toFlag));
-
-
 swapBtn.addEventListener("click", () => {
   let temp = fromCurrency.value;
   fromCurrency.value = toCurrency.value;
   toCurrency.value = temp;
-
   updateFlag(fromCurrency, fromFlag);
   updateFlag(toCurrency, toFlag);
-
   convertCurrency();
 });
 
 loadCurrencies();
+
